@@ -1,0 +1,22 @@
+{
+  "name": "워크샵 미션 빙고",
+  "short_name": "미션빙고",
+  "description": "워크샵 조별 미션 인증 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1628",
+  "theme_color": "#0A1628",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

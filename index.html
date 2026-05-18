@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="미션빙고">
+<link rel="manifest" href="manifest.json">
+<title>🏆 워크샵 미션 빙고</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #0DBF7E;
+    --green-dark: #089E68;
+    --green-pale: #E6FBF3;
+    --navy: #0A1628;
+    --navy-mid: #1A2A42;
+    --text: #1A2A42;
+    --text-2: #5A6A80;
+    --text-3: #8A9AAE;
+    --border: #E2EAF2;
+    --bg: #F4F8FC;
+    --white: #FFFFFF;
+    --gold: #F5A623;
+    --danger: #F04040;
+    --shadow: 0 4px 24px rgba(10,22,40,0.10);
+    --shadow-sm: 0 2px 8px rgba(10,22,40,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1A3A5C 100%);
+    padding: 2rem 1.25rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 20%, rgba(13,191,126,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(13,191,126,0.10) 0%, transparent 50%);
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(13,191,126,0.2); border: 1px solid rgba(13,191,126,0.4);
+    color: var(--green); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 99px; margin-bottom: 10px;
+  }
+  .hero h1 { font-family: 'Black Han Sans', sans-serif; font-size: clamp(26px,7vw,36px); color: var(--white); line-height: 1.1; margin-bottom: 6px; }
+  .hero h1 span { color: var(--green); }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+  /* CONNECTING */
+  .connecting { text-align: center; padding: 3rem 1rem; color: var(--text-3); font-size: 14px; }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* CONTAINER */
+  .container { max-width: 520px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+
+  /* TEAM SECTION */
+  .team-section { background: var(--white); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+  .team-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+  .team-btn {
+    aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 10px;
+    background: var(--bg); font-size: 12px; font-weight: 700; color: var(--text-2);
+    cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .team-btn:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-pale); }
+  .team-btn.active { border-color: var(--green); background: var(--green); color: white; box-shadow: 0 2px 8px rgba(13,191,126,0.35); transform: scale(1.05); }
+  .team-btn .done-dot { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; border: 1px solid white; }
+
+  /* BANNER */
+  .selected-banner {
+    background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow);
+  }
+  .team-name { font-family: 'Black Han Sans', sans-serif; font-size: 22px; color: var(--white); }
+  .team-name span { color: var(--green); }
+  .progress-info { text-align: right; }
+  .progress-num { font-size: 20px; font-weight: 900; color: var(--green); line-height: 1; }
+  .progress-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .progress-bar-outer { height: 6px; background: rgba(255,255,255,0.12); border-radius: 99px; margin-top: 10px; overflow: hidden; width: 140px; }
+  .progress-bar-inner { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); box-shadow: 0 0 8px rgba(13,191,126,0.6); }
+
+  /* COMPLETE */
+  .complete-banner {
+    display: none; background: linear-gradient(135deg, var(--navy) 0%, #0A2A1A 100%);
+    border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1rem;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .complete-banner.show { display: block; }
+  .complete-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(13,191,126,0.25) 0%, transparent 70%); }
+  .complete-banner .cb-inner { position: relative; z-index: 1; }
+  .complete-banner .cb-emoji { font-size: 36px; margin-bottom: 6px; }
+  .complete-banner .cb-title { font-family: 'Black Han Sans', sans-serif; font-size: 22px; color: var(--green); margin-bottom: 4px; }
+  .complete-banner .cb-sub { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  /* MISSIONS */
+  .missions-title { font-size: 13px; font-weight: 700; color: var(--text-2); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .missions-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.25rem; }
+  .mission-card {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 12px 8px 10px; cursor: pointer; transition: all 0.2s cubic-bezier(.4,0,.2,1);
+    position: relative; display: flex; flex-direction: column; align-items: center;
+    text-align: center; min-height: 110px; box-shadow: var(--shadow-sm); overflow: hidden;
+  }
+  .mission-card:hover { transform: translateY(-2px); border-color: var(--green); box-shadow: 0 6px 20px rgba(13,191,126,0.15); }
+  .mission-card:active { transform: scale(0.97); }
+  .mission-card.done { border-color: var(--green); background: var(--green-pale); box-shadow: 0 4px 16px rgba(13,191,126,0.2); }
+  .mission-icon { font-size: 24px; margin-bottom: 6px; line-height: 1; }
+  .mission-text { font-size: 10.5px; line-height: 1.45; color: var(--text-2); font-weight: 500; flex: 1; }
+  .mission-card.done .mission-text { color: var(--green-dark); }
+  .check-badge { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; box-shadow: 0 2px 6px rgba(13,191,126,0.4); }
+  .mission-thumb { width: 100%; height: 52px; object-fit: cover; border-radius: 8px; margin-top: 7px; border: 1px solid rgba(13,191,126,0.2); }
+
+  /* LEADERBOARD */
+  .lb-section { background: var(--white); border-radius: 16px; padding: 1.25rem; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 1rem; }
+  .lb-header { font-family: 'Black Han Sans', sans-serif; font-size: 17px; color: var(--navy); margin-bottom: 12px; }
+  .lb-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { width: 28px; font-size: 16px; text-align: center; flex-shrink: 0; }
+  .lb-name { flex: 1; font-weight: 700; color: var(--text); }
+  .lb-bar-wrap { width: 70px; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .lb-bar { height: 100%; background: linear-gradient(90deg, var(--green) 0%, #0BE8A0 100%); border-radius: 99px; transition: width 0.5s; }
+  .lb-score { width: 30px; text-align: right; font-weight: 900; color: var(--green-dark); font-size: 14px; }
+  .lb-row.mine { background: var(--green-pale); border-radius: 8px; padding: 8px 8px; }
+  .lb-row.mine .lb-name { color: var(--green-dark); }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-3); }
+  .empty-state .big { font-size: 40px; margin-bottom: 10px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,22,40,0.7); backdrop-filter: blur(4px); z-index: 500; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet { background: var(--white); border-radius: 24px 24px 0 0; padding: 1.5rem 1.25rem 2rem; width: 100%; max-width: 520px; animation: slideUp 0.3s cubic-bezier(.4,0,.2,1); }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 99px; margin: 0 auto 1.25rem; }
+  .modal-title { font-family: 'Black Han Sans', sans-serif; font-size: 20px; color: var(--navy); margin-bottom: 4px; }
+  .modal-sub { font-size: 13px; color: var(--text-3); margin-bottom: 1.25rem; }
+  .upload-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 1.75rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg); margin-bottom: 1rem; }
+  .upload-zone:hover { border-color: var(--green); background: var(--green-pale); }
+  .upload-zone .u-icon { font-size: 30px; margin-bottom: 6px; }
+  .upload-zone p { font-size: 13px; color: var(--text-3); line-height: 1.5; }
+  .preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; display: none; border: 1px solid var(--border); }
+  .modal-actions { display: flex; gap: 8px; }
+  .btn { flex: 1; height: 48px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 700; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--green); border-color: var(--green); color: white; box-shadow: 0 4px 14px rgba(13,191,126,0.35); }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-danger { background: #FFF0F0; border-color: #FFCCCC; color: var(--danger); flex: 0 0 auto; width: 56px; padding: 0; }
+  input[type="file"] { display: none; }
+
+  /* TOAST */
+  .toast { display: none; position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--navy); color: white; border-radius: 99px; padding: 10px 20px; font-size: 13px; font-weight: 700; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
+  .toast.green { background: var(--green); }
+
+  /* SYNC indicator */
+  .sync-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  @media (max-width: 380px) {
+    .team-grid { grid-template-columns: repeat(6, 1fr); }
+    .mission-grid { gap: 6px; }
+    .mission-card { min-height: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏕 OLIVE WORKSHOP 2025</div>
+    <h1>미션 <span>빙고</span> 🏆</h1>
+    <p class="hero-sub"><span class="sync-dot"></span>전 직원 실시간 공유 • 조를 선택하고 인증샷을 올려주세요!</p>
+  </div>
+</div>
+
+<div class="container">
+  <div id="connectingView" class="connecting">
+    <div class="spinner"></div>
+    Firebase 연결 중...
+  </div>
+
+  <div id="appView" style="display:none">
+    <!-- 조 선택 -->
+    <div class="team-section">
+      <div class="section-label">🙋 우리 조 선택</div>
+      <div class="team-grid" id="teamGrid"></div>
+    </div>
+
+    <!-- 배너 -->
+    <div id="selectedBanner" style="display:none"></div>
+
+    <!-- 완료 배너 -->
+    <div class="complete-banner" id="completeBanner">
+      <div class="cb-inner">
+        <div class="cb-emoji">🎉</div>
+        <div class="cb-title">미션 올클리어!</div>
+        <div class="cb-sub">9개 미션을 모두 완료했어요!</div>
+      </div>
+    </div>
+
+    <!-- 미션 -->
+    <div id="missionArea" style="display:none">
+      <div class="missions-title">📋 미션 목록</div>
+      <div class="mission-grid" id="missionGrid"></div>
+    </div>
+
+    <!-- 빈 상태 -->
+    <div class="empty-state" id="emptyState">
+      <div class="big">👆</div>
+      <p>위에서 우리 조를 선택하면<br>미션 목록이 나타납니다!</p>
+    </div>
+
+    <!-- 리더보드 -->
+    <div class="lb-section" id="lbSection">
+      <div class="lb-header">🏅 실시간 순위</div>
+      <div id="lbList"><div style="text-align:center;color:var(--text-3);font-size:13px;padding:1rem 0">아직 완료한 조가 없어요</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 -->
+<div class="modal-overlay" id="modalOverlay" onclick="onOverlayClick(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="u-icon">📷</div>
+      <p>탭해서 인증샷 선택<br><span style="font-size:11px">JPG / PNG / HEIC 지원</span></p>
+    </div>
+    <img id="previewImg" class="preview-img" />
+    <input type="file" id="fileInput" accept="image/*" onchange="onFileChange(event)" />
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">취소</button>
+      <button class="btn btn-danger" id="deleteBtn" style="display:none" onclick="deletePhoto()">🗑</button>
+      <button class="btn btn-primary" id="confirmBtn" onclick="confirmPhoto()">인증 완료 ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAtSUII176Ckgoujn07hivFVPYEEFyIDfI",
+  authDomain: "workshop-gangreung.firebaseapp.com",
+  databaseURL: "https://workshop-gangreung-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "workshop-gangreung",
+  storageBucket: "workshop-gangreung.firebasestorage.app",
+  messagingSenderId: "986919161463",
+  appId: "1:986919161463:web:737d2c2fa88cacf82c4072"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const MISSIONS = [
+  { id:0, icon:"🚌", text:"버스에서 출발 인증샷 찍기" },
+  { id:1, icon:"🍱", text:"도시락 완밥 인증샷 찍기" },
+  { id:2, icon:"🚢", text:"크루즈 식사 멤버들이랑 인증샷" },
+  { id:3, icon:"🌊", text:"바닷가 추천 포즈 단체 사진" },
+  { id:4, icon:"☕", text:"숙소 주변 카페 방문하기" },
+  { id:5, icon:"🦶", text:"바닷가에 발 담그기" },
+  { id:6, icon:"🎆", text:"저녁에 불꽃놀이하기" },
+  { id:7, icon:"🥣", text:"조원들이랑 조식 먹기" },
+  { id:8, icon:"🌅", text:"아침 산책길 산책하기" },
+];
+const NUM_TEAMS = 32;
+
+let state = {}; // { teamId: { missionId: { done, photo } } }
+let curTeam = null;
+let curMission = null;
+let pendingPhoto = null;
+
+// ── INIT ──
+for (let t = 1; t <= NUM_TEAMS; t++) {
+  state[t] = {};
+  for (let m of MISSIONS) state[t][m.id] = { done: false, photo: null };
+}
+
+// ── FIREBASE REALTIME LISTENER ──
+const rootRef = ref(db, 'missions');
+onValue(rootRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    // merge firebase data into state
+    for (let t = 1; t <= NUM_TEAMS; t++) {
+      if (data[t]) {
+        for (let m of MISSIONS) {
+          if (data[t][m.id]) {
+            state[t][m.id] = data[t][m.id];
+          }
+        }
+      }
+    }
+  }
+  document.getElementById('connectingView').style.display = 'none';
+  document.getElementById('appView').style.display = 'block';
+  initTeamGrid();
+  if (curTeam) {
+    renderBanner();
+    renderMissions();
+  }
+  renderLeaderboard();
+}, { onlyOnce: false });
+
+// ── SAVE TO FIREBASE ──
+async function saveTeamMission(team, mid) {
+  const mRef = ref(db, `missions/${team}/${mid}`);
+  await set(mRef, state[team][mid]);
+}
+
+// ── TEAM GRID ──
+window.initTeamGrid = function() {
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = '';
+  for (let t = 1; t <= NUM_TEAMS; t++) {
+    const done = countDone(t);
+    const btn = document.createElement('button');
+    btn.className = 'team-btn' + (curTeam === t ? ' active' : '');
+    btn.innerHTML = t + (done > 0 ? '<span class="done-dot"></span>' : '');
+    btn.onclick = () => selectTeam(t);
+    grid.appendChild(btn);
+  }
+}
+
+window.selectTeam = function(t) {
+  curTeam = t;
+  initTeamGrid();
+  renderBanner();
+  renderMissions();
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('missionArea').style.display = 'block';
+}
+
+function countDone(t) {
+  if (!state[t]) return 0;
+  return MISSIONS.filter(m => state[t][m.id] && state[t][m.id].done).length;
+}
+
+function renderBanner() {
+  const done = countDone(curTeam);
+  const pct = Math.round(done / MISSIONS.length * 100);
+  const banner = document.getElementById('selectedBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `
+    <div class="selected-banner">
+      <div>
+        <div class="team-name"><span>${curTeam}조</span></div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <div class="progress-info">
+        <div class="progress-num">${done}<span style="font-size:13px;font-weight:500;color:rgba(255,255,255,0.4)"> / ${MISSIONS.length}</span></div>
+        <div class="progress-label">미션 완료</div>
+      </div>
+    </div>`;
+  const cb = document.getElementById('completeBanner');
+  if (done === MISSIONS.length) cb.classList.add('show');
+  else cb.classList.remove('show');
+}
+
+function renderMissions() {
+  const grid = document.getElementById('missionGrid');
+  grid.innerHTML = '';
+  for (let m of MISSIONS) {
+    const ms = state[curTeam][m.id];
+    const card = document.createElement('div');
+    card.className = 'mission-card' + (ms.done ? ' done' : '');
+    card.onclick = () => openModal(m.id);
+    let inner = '';
+    if (ms.done) inner += '<div class="check-badge">✓</div>';
+    inner += `<div class="mission-icon">${m.icon}</div>`;
+    inner += `<div class="mission-text">${m.text}</div>`;
+    if (ms.photo) inner += `<img class="mission-thumb" src="${ms.photo}" />`;
+    card.innerHTML = inner;
+    grid.appendChild(card);
+  }
+}
+
+function renderLeaderboard() {
+  let scores = [];
+  for (let t = 1; t <= NUM_TEAMS; t++) {
+    const n = countDone(t);
+    if (n > 0) scores.push({ t, n });
+  }
+  scores.sort((a,b) => b.n - a.n);
+  const top = scores.slice(0, 10);
+  const list = document.getElementById('lbList');
+  if (!top.length) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-3);font-size:13px;padding:1rem 0">아직 완료한 조가 없어요</div>';
+    return;
+  }
+  const max = top[0].n || 1;
+  const medals = ['🥇','🥈','🥉'];
+  list.innerHTML = top.map((s, i) => {
+    const w = Math.round(s.n / max * 100);
+    const isMine = s.t === curTeam;
+    return `<div class="lb-row${isMine?' mine':''}">
+      <div class="lb-rank">${medals[i] || (i+1)}</div>
+      <div class="lb-name">${s.t}조${isMine?' 👈':''}</div>
+      <div class="lb-bar-wrap"><div class="lb-bar" style="width:${w}%"></div></div>
+      <div class="lb-score">${s.n}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODAL ──
+window.openModal = function(mid) {
+  curMission = mid;
+  pendingPhoto = null;
+  const m = MISSIONS.find(x => x.id === mid);
+  const ms = state[curTeam][mid];
+  document.getElementById('modalTitle').textContent = m.icon + ' ' + m.text;
+  document.getElementById('modalSub').textContent = curTeam + '조 인증샷을 업로드하세요';
+  const prev = document.getElementById('previewImg');
+  const uz = document.getElementById('uploadZone');
+  if (ms.photo) {
+    prev.src = ms.photo; prev.style.display = 'block';
+    uz.style.display = 'none';
+    document.getElementById('deleteBtn').style.display = 'flex';
+  } else {
+    prev.src = ''; prev.style.display = 'none';
+    uz.style.display = 'block';
+    document.getElementById('deleteBtn').style.display = 'none';
+  }
+  document.getElementById('confirmBtn').textContent = ms.done ? '재인증 완료 ✓' : '인증 완료 ✓';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+window.closeModal = function() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  curMission = null; pendingPhoto = null;
+}
+
+window.onOverlayClick = function(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+window.onFileChange = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    resizeImage(ev.target.result, 800, (dataUrl) => {
+      pendingPhoto = dataUrl;
+      const prev = document.getElementById('previewImg');
+      prev.src = dataUrl; prev.style.display = 'block';
+      document.getElementById('uploadZone').style.display = 'none';
+      document.getElementById('deleteBtn').style.display = 'flex';
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function resizeImage(dataUrl, maxW, callback) {
+  const img = new Image();
+  img.onload = () => {
+    let w = img.width, h = img.height;
+    if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', 0.72));
+  };
+  img.src = dataUrl;
+}
+
+window.confirmPhoto = async function() {
+  if (!pendingPhoto && !state[curTeam][curMission].photo) {
+    document.getElementById('fileInput').click(); return;
+  }
+  if (pendingPhoto) state[curTeam][curMission].photo = pendingPhoto;
+  state[curTeam][curMission].done = true;
+  closeModal();
+  showToast('⏳ 저장 중...', false);
+  await saveTeamMission(curTeam, curMission);
+  showToast('✅ 인증 완료!', true);
+  renderBanner(); renderMissions(); renderLeaderboard(); initTeamGrid();
+}
+
+window.deletePhoto = async function() {
+  state[curTeam][curMission].photo = null;
+  state[curTeam][curMission].done = false;
+  closeModal();
+  await saveTeamMission(curTeam, curMission);
+  showToast('🗑 삭제되었습니다', false);
+  renderBanner(); renderMissions(); renderLeaderboard(); initTeamGrid();
+}
+
+window.showToast = function(msg, green=true) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (green ? ' green' : '');
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2000);
+}
+</script>
+</body>
+</html>
