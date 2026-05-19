@@ -328,6 +328,8 @@ onValue(rootRef, (snapshot) => {
 
 // ── SAVE TO FIREBASE ──
 async function saveTeamMission(team, mid) {
+  if (!state[team]) state[team] = {};
+  if (!state[team][mid]) state[team][mid] = { done: false, photo: null };
   const mRef = ref(db, `missions/${team}/m${mid}`);
   const data = state[team][mid];
   await set(mRef, { done: data.done === true, photo: data.photo || null });
