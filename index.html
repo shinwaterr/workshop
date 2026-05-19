@@ -302,12 +302,15 @@ const rootRef = ref(db, 'missions');
 onValue(rootRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
-    // merge firebase data into state
     for (let t = 1; t <= NUM_TEAMS; t++) {
       if (data[t]) {
         for (let m of MISSIONS) {
-          if (data[t][m.id]) {
-            state[t][m.id] = data[t][m.id];
+          const key = `m${m.id}`;
+          if (data[t][key]) {
+            state[t][m.id] = {
+              done: data[t][key].done === true,
+              photo: data[t][key].photo || null
+            };
           }
         }
       }
@@ -325,8 +328,9 @@ onValue(rootRef, (snapshot) => {
 
 // ── SAVE TO FIREBASE ──
 async function saveTeamMission(team, mid) {
-  const mRef = ref(db, `missions/${team}/${mid}`);
-  await set(mRef, state[team][mid]);
+  const mRef = ref(db, `missions/${team}/m${mid}`);
+  const data = state[team][mid];
+  await set(mRef, { done: data.done === true, photo: data.photo || null });
 }
 
 // ── TEAM GRID ──
