@@ -141,7 +141,16 @@ import{getDatabase,ref,set,onValue}from"https://www.gstatic.com/firebasejs/10.12
 const IK="64805a3b0b053802bd74c2dd648515dc";
 const app=initializeApp({apiKey:"AIzaSyAtSUII176Ckgoujn07hivFVPYEEFyIDfI",authDomain:"workshop-gangreung.firebaseapp.com",databaseURL:"https://workshop-gangreung-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"workshop-gangreung",storageBucket:"workshop-gangreung.firebasestorage.app",messagingSenderId:"986919161463",appId:"1:986919161463:web:737d2c2fa88cacf82c4072"});
 const db=getDatabase(app);
-const MS=[{id:0,icon:"🚌",text:"버스에서 출발 인증샷 찍기"},{id:1,icon:"🍱",text:"도시락 완밥 인증샷 찍기"},{id:2,icon:"🚢",text:"크루즈 식사 멤버들이랑 인증샷"},{id:3,icon:"🌊",text:"바닷가 추천 포즈 단체 사진"},{id:4,icon:"☕",text:"숙소 주변 카페 방문하기"},{id:5,icon:"🦶",text:"바닷가에 발 담그기"},{id:6,icon:"🎆",text:"저녁에 불꽃놀이하기"},{id:7,icon:"🥣",text:"조원들이랑 조식 먹기"},{id:8,icon:"🌅",text:"아침 산책길 산책하기"}];
+const MS = [
+  { id: 0, icon: "🚌", text: "버스에서 출발 인증샷 찍기" },
+  { id: 1, icon: "🍱", text: "도시락 완밥 인증샷 찍기" },
+  { id: 2, icon: "🚢", text: "크루즈 식사 멤버들이랑 인증샷" },
+  { id: 3, icon: "🌊", text: "바닷가 추천 포즈 단체 사진" },
+  { id: 4, icon: "⛸️", text: "스케이트 링크장을 배경으로 사진찍기" },
+  { id: 5, icon: "🏰", text: "그랜드 볼룸에서 사진찍기" },
+  { id: 6, icon: "🍻", text: "횟집에서 건배샷찍기" },
+  { id: 7, icon: "🥣", text: "조원들이랑 조식 먹기" },
+  { id: 8, icon: "🌅", text: "아침 산책길 산책하기" }];
 const NT=32;let S={},cT=null,cM=null,pI=null;
 for(let t=1;t<=NT;t++){S[t]={};for(let m of MS)S[t][m.id]={done:false,url:null};}
 function gs(t,m){if(!S[t])S[t]={};if(S[t][m]===undefined)S[t][m]={done:false,url:null,pos:'50% 50%'};return S[t][m];}
