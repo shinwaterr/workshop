@@ -13,11 +13,11 @@
 :root{--green:#0DBF7E;--green-dark:#089E68;--green-pale:#E6FBF3;--navy:#0A1628;--navy-mid:#1A2A42;--text:#1A2A42;--text-2:#5A6A80;--text-3:#8A9AAE;--border:#E2EAF2;--bg:#F4F8FC;--white:#FFFFFF;--gold:#F5A623;--danger:#F04040;--shadow:0 4px 24px rgba(10,22,40,.10);--shadow-sm:0 2px 8px rgba(10,22,40,.07);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:"Noto Sans KR",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#1A3A5C 100%);padding:2rem 1.25rem 1.5rem;text-align:center;position:relative;overflow:hidden;}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#1A3A5C 100%);padding:2rem 1.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(13,191,126,.18) 0%,transparent 60%);}
 .hero-inner{position:relative;z-index:1;}
 .hero-badge{display:inline-block;background:rgba(13,191,126,.2);border:1px solid rgba(13,191,126,.4);color:var(--green);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:10px;}
-.hero h1{font-family:"Black Han Sans",sans-serif;font-size:clamp(26px,7vw,36px);color:var(--white);line-height:1.1;margin-bottom:6px;}
+.hero h1{font-family:"Black Han Sans",sans-serif;font-size:clamp(24px,6.5vw,34px);color:var(--white);line-height:1.15;margin-bottom:6px;padding:0 4px;letter-spacing:-.01em;}
 .hero h1 span{color:var(--green);}
 .hero-sub{font-size:13px;color:rgba(255,255,255,.55);line-height:1.5;}
 .connecting{text-align:center;padding:3rem 1rem;color:var(--text-3);font-size:14px;}
@@ -47,7 +47,8 @@ body{font-family:"Noto Sans KR",sans-serif;background:var(--bg);color:var(--text
 .complete-banner .cb-sub{font-size:13px;color:rgba(255,255,255,.6);}
 .missions-title{font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
 .missions-title::after{content:"";flex:1;height:1px;background:var(--border);}
-.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem;}
+.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.75rem;}
+.mission-note{font-size:12px;color:var(--text-2);line-height:1.5;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:1.25rem;}
 .mission-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px 10px;cursor:pointer;transition:all .2s;position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:110px;box-shadow:var(--shadow-sm);overflow:hidden;}
 .mission-card:hover{transform:translateY(-2px);border-color:var(--green);}
 .mission-card:active{transform:scale(.97);}
@@ -114,7 +115,7 @@ input[type="file"]{display:none;}
     </div>
     <div id="sb" style="display:none"></div>
     <div class="complete-banner" id="cb"><div class="cb-inner"><div class="cb-emoji">🎉</div><div class="cb-title">미션 올클리어!</div><div class="cb-sub">9개 미션을 모두 완료했어요!</div></div></div>
-    <div id="ma" style="display:none"><div class="missions-title">미션 목록</div><div class="mission-grid" id="mg"></div></div>
+    <div id="ma" style="display:none"><div class="missions-title">미션 목록</div><div class="mission-grid" id="mg"></div><div class="mission-note">⚠️ 모든 미션 인증샷은 팀 전원 얼굴 또는 명찰이 나와야 인정됩니다.</div></div>
     <div class="empty-state" id="es"><div class="big">👆</div><p>위에서 우리 조를 선택하면<br>미션 목록이 나타납니다!</p></div>
     <div class="lb-section"><div class="lb-header">실시간 순위</div><div id="ll"><div style="text-align:center;color:var(--text-3);font-size:13px;padding:1rem 0">아직 완료한 조가 없어요</div></div></div>
   </div>
