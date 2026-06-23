@@ -54,7 +54,7 @@ body{font-family:"Noto Sans KR",sans-serif;background:var(--bg);color:var(--text
 .mission-card:active{transform:scale(.97);}
 .mission-card.done{border-color:var(--green);background:var(--green-pale);}
 .mission-icon{font-size:24px;margin-bottom:6px;line-height:1;}
-.mission-text{font-size:10.5px;line-height:1.45;color:var(--text-2);font-weight:500;flex:1;}
+.mission-text{font-size:10.5px;line-height:1.45;color:var(--text-2);font-weight:500;flex:1;word-break:keep-all;overflow-wrap:break-word;}
 .mission-card.done .mission-text{color:var(--green-dark);}
 .check-badge{position:absolute;top:6px;right:6px;width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:white;}
 .mission-thumb{width:100%;height:60px;object-fit:cover;border-radius:8px;margin-top:7px;}
@@ -143,15 +143,15 @@ const IK="64805a3b0b053802bd74c2dd648515dc";
 const app=initializeApp({apiKey:"AIzaSyAtSUII176Ckgoujn07hivFVPYEEFyIDfI",authDomain:"workshop-gangreung.firebaseapp.com",databaseURL:"https://workshop-gangreung-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"workshop-gangreung",storageBucket:"workshop-gangreung.firebasestorage.app",messagingSenderId:"986919161463",appId:"1:986919161463:web:737d2c2fa88cacf82c4072"});
 const db=getDatabase(app);
 const MS = [
-  { id: 0, icon: "🚌", text: "버스에서 인증샷 찍기" },
-  { id: 1, icon: "🍱", text: "도시락 완밥 인증샷 찍기" },
-  { id: 2, icon: "🚢", text: "크루즈에서 인증샷 찍기" },
-  { id: 3, icon: "🌊", text: "바닷가에서 단체 사진찍기" },
-  { id: 4, icon: "⛸️", text: "스케이트 링크장을 배경으로 사진찍기" },
-  { id: 5, icon: "🏰", text: "그랜드 볼룸에서 사진찍기" },
-  { id: 6, icon: "🍻", text: "횟집에서 건배샷 찍기" },
-  { id: 7, icon: "🥣", text: "조원들이랑 조식 먹기" },
-  { id: 8, icon: "🌅", text: "조원들이랑 아침 산책길 산책하기" }];
+  { id: 0, icon: "🚌", text: "버스에서\n인증샷 찍기" },
+  { id: 1, icon: "🍱", text: "도시락\n완밥 인증샷 찍기" },
+  { id: 2, icon: "🚢", text: "크루즈에서\n인증샷 찍기" },
+  { id: 3, icon: "🌊", text: "바닷가에서\n단체 사진찍기" },
+  { id: 4, icon: "⛸️", text: "스케이트 링크장을\n배경으로\n사진찍기" },
+  { id: 5, icon: "🏰", text: "그랜드 볼룸에서\n사진찍기" },
+  { id: 6, icon: "🍻", text: "횟집에서\n건배샷 찍기" },
+  { id: 7, icon: "🥣", text: "조원들이랑\n조식 먹기" },
+  { id: 8, icon: "🏨", text: "스카이베이를\n배경으로\n단체샷 찍기" }];
 const NT=32;let S={},cT=null,cM=null,pI=null;
 for(let t=1;t<=NT;t++){S[t]={};for(let m of MS)S[t][m.id]={done:false,url:null};}
 function gs(t,m){if(!S[t])S[t]={};if(S[t][m]===undefined)S[t][m]={done:false,url:null,pos:'50% 50%'};return S[t][m];}
@@ -173,9 +173,9 @@ function cd(t){if(!S[t])return 0;return MS.filter(m=>S[t][m.id]&&S[t][m.id].done
 function rTG(){const g=document.getElementById("tg");g.innerHTML="";for(let t=1;t<=NT;t++){const n=cd(t),b=document.createElement("button");b.className="team-btn"+(cT===t?" active":"");b.innerHTML=t+(n>0?"<span class='done-dot'></span>":"");b.onclick=()=>sT(t);g.appendChild(b);}}
 function sT(t){cT=t;rTG();rB();rM();document.getElementById("es").style.display="none";document.getElementById("ma").style.display="block";}
 function rB(){const dn=cd(cT),p=Math.round(dn/MS.length*100),el=document.getElementById("sb");el.style.display="block";el.innerHTML="<div class='selected-banner' style='flex-direction:column;gap:10px'><div style='display:flex;justify-content:space-between;align-items:center;width:100%'><div class='team-name'><span>"+cT+"조</span></div><div style='text-align:right'><div class='progress-num'>"+dn+"<span style='font-size:13px;font-weight:500;color:rgba(255,255,255,.4)'> / "+MS.length+"</span></div><div class='progress-label'>미션 완료</div></div></div><div class='progress-bar-outer'><div class='progress-bar-inner' style='width:"+p+"%'></div></div></div>";dn===MS.length?document.getElementById("cb").classList.add("show"):document.getElementById("cb").classList.remove("show");}
-function rM(){const g=document.getElementById("mg");g.innerHTML="";for(let m of MS){const s=gs(cT,m.id),c=document.createElement("div");c.className="mission-card"+(s.done?" done":"");c.onclick=()=>oM(m.id);let h=s.done?"<div class='check-badge'>✓</div>":"";h+="<div class='mission-icon'>"+m.icon+"</div><div class='mission-text'>"+m.text+"</div>";if(s.url)h+="<img class='mission-thumb' src='"+s.url+"' style='object-position:"+(s.pos||'50% 50%')+"' />";c.innerHTML=h;g.appendChild(c);}}
+function rM(){const g=document.getElementById("mg");g.innerHTML="";for(let m of MS){const s=gs(cT,m.id),c=document.createElement("div");c.className="mission-card"+(s.done?" done":"");c.onclick=()=>oM(m.id);let h=s.done?"<div class='check-badge'>✓</div>":"";h+="<div class='mission-icon'>"+m.icon+"</div><div class='mission-text'>"+m.text.replace(/\n/g,"<br>")+"</div>";if(s.url)h+="<img class='mission-thumb' src='"+s.url+"' style='object-position:"+(s.pos||'50% 50%')+"' />";c.innerHTML=h;g.appendChild(c);}}
 function rL(){let sc=[];for(let t=1;t<=NT;t++){const n=cd(t);if(n>0)sc.push({t,n});}sc.sort((a,b)=>b.n-a.n);const top=sc.slice(0,10),list=document.getElementById("ll");if(!top.length){list.innerHTML="<div style='text-align:center;color:var(--text-3);font-size:13px;padding:1rem 0'>아직 완료한 조가 없어요</div>";return;}const mx=top[0].n||1,md=["🥇","🥈","🥉"];list.innerHTML=top.map((s,i)=>{const w=Math.round(s.n/mx*100),mine=s.t===cT;return"<div class='lb-row"+(mine?" mine":"")+"'><div class='lb-rank'>"+(md[i]||(i+1))+"</div><div class='lb-name'>"+s.t+"조"+(mine?" 👈":"")+"</div><div class='lb-bar-wrap'><div class='lb-bar' style='width:"+w+"%'></div></div><div class='lb-score'>"+s.n+"</div></div>";}).join("");}
-function oM(mid){cM=mid;pI=null;curPos={x:50,y:50};const m=MS[mid],s=gs(cT,mid);const pw=document.getElementById("pw");document.getElementById("mt").textContent=m.icon+" "+m.text;document.getElementById("ms").textContent=cT+"조 인증샷을 업로드하세요";const pv=document.getElementById("pi"),uz=document.getElementById("uz");if(s.url){pv.src=s.url;pv.style.objectPosition=s.pos||"50% 50%";pw.style.display="block";uz.style.display="none";document.getElementById("db").style.display="flex";}else{pv.src="";pw.style.display="none";uz.style.display="block";document.getElementById("db").style.display="none";}document.getElementById("ok").textContent=s.done?"재인증 완료 ✓":"인증 완료 ✓";document.getElementById("fi").value="";document.getElementById("mo").classList.add("open");}
+function oM(mid){cM=mid;pI=null;curPos={x:50,y:50};const m=MS[mid],s=gs(cT,mid);const pw=document.getElementById("pw");document.getElementById("mt").textContent=m.icon+" "+m.text.replace(/\n/g," ");document.getElementById("ms").textContent=cT+"조 인증샷을 업로드하세요";const pv=document.getElementById("pi"),uz=document.getElementById("uz");if(s.url){pv.src=s.url;pv.style.objectPosition=s.pos||"50% 50%";pw.style.display="block";uz.style.display="none";document.getElementById("db").style.display="flex";}else{pv.src="";pw.style.display="none";uz.style.display="block";document.getElementById("db").style.display="none";}document.getElementById("ok").textContent=s.done?"재인증 완료 ✓":"인증 완료 ✓";document.getElementById("fi").value="";document.getElementById("mo").classList.add("open");}
 function cl(){document.getElementById("mo").classList.remove("open");cM=null;pI=null;curPos={x:50,y:50};}
 document.getElementById("cn").onclick=cl;
 document.getElementById("mo").onclick=e=>{if(e.target===document.getElementById("mo"))cl();};
